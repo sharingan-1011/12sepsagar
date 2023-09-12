@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"content": {
+			"query": "select top 100 *\nfrom OPENROWSET(\n    bulk 'https://sa12sepsagar.dfs.core.windows.net/fs12sepsagar/yellow_tripdata_2023-01.parquet',\n    format = 'parquet'\n) as [Result]\n\ncreate database DataExplorationDB\n\tCOLLATE Latin1_General_100_BIN2_UTF8\n\n\nuse DataExplorationDB\n\nCREATE external data SOURCE dssa12sepsagar\nwith (location = 'https://sa12sepsagar.dfs.core.windows.net')\n\n\ncreate login userdataexplorer with PASSWORD = 'localhost8000@'\n\ncreate user userdbdataexplorer for login userdataexplorer;\nGO\n\ngrant ADMINISTER DATABASE BULK operations to userdbdataexplorer;\ngo\n\n\nselect top 100 *\nfrom OPENROWSET(\n    bulk '/fs12sepsagar/yellow_tripdata_2023-01.parquet',\n    DATA_SOURCE = 'dssa12sepsagar',\n    format = 'parquet'\n) as [Result]\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "DataExplorationDB",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
